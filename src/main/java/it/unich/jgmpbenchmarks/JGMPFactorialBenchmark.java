@@ -43,12 +43,12 @@ public class JGMPFactorialBenchmark {
     @Param({ "1000", "10000", "100000" })
     public int fact ;
     
-    //@Benchmark
+    @Benchmark
     public MPZ factorialMPZ() {
         return factorialMPZ(fact);
     }
 
-    //@Benchmark
+    @Benchmark
     public BigInteger factorialBigInteger() {
         return factorialBigInteger(fact);
     }
