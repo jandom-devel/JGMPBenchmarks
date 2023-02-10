@@ -1,6 +1,6 @@
 /**
-* Copyright 2022 Francesca Scozzari <francesca.scozzari@unich.it> and
-*                Gianluca Amato <gianluca.amato@unich.it>
+* Copyright 2022, 2023 Francesca Scozzari <francesca.scozzari@unich.it> and
+*                      Gianluca Amato <gianluca.amato@unich.it>
 *
 * JGMPBenchmarks is a set of benchmarks for JGMP. JGMPBenchmarks is free software: you can
 * redistribute it and/or modify it under the terms of the GNU General Public
