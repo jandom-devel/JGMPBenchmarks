@@ -43,7 +43,12 @@ import it.unich.jgmp.*;
 public class JGMPFactorialBenchmark {
 
     @Param({ "1000", "10000", "100000" })
-    public int fact ;
+    public int fact;
+
+    @Benchmark
+    public MPZ factorialMPZfast() {
+        return MPZ.facUi(fact);
+    }
 
     @Benchmark
     public MPZ factorialMPZ() {
