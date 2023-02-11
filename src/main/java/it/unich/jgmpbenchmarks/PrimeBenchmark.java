@@ -58,8 +58,13 @@ public class PrimeBenchmark {
      * @param args not used.
      */
     public static void main(String[] args) throws RunnerException {
-        Options opt = new OptionsBuilder().include(PrimeBenchmark.class.getSimpleName()).build();
+        String res = "1267650600228229401496703213077";
+        if (!nextProbablePrimeBigInteger(100).equals(new BigInteger(res)))
+            throw new Error("Invalid BigInteger result");
+        if (!nextProbablePrimeMPZ(100).equals(new MPZ(res)))
+            throw new Error("Invalid MPZ result");
 
+        Options opt = new OptionsBuilder().include(PrimeBenchmark.class.getSimpleName()).build();
         new Runner(opt).run();
     }
 

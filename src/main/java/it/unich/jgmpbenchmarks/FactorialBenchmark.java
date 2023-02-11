@@ -74,8 +74,16 @@ public class FactorialBenchmark {
      * @param args not used.
      */
     public static void main(String[] args) throws RunnerException {
-        Options opt = new OptionsBuilder().include(FactorialBenchmark.class.getSimpleName()).build();
-
+        String res = "265252859812191058636308480000000";
+        if (!factorialBigInteger(30).equals(new BigInteger(res)))
+            throw new Error("Invalid BigInteger result");
+        if (!factorialMPZ(30).equals(new MPZ(res)))
+            throw new Error("Invalid MPZ result");
+        if (!factorialLargeInteger(30).equals(LargeInteger.valueOf(res)))
+            throw new Error("Invalid LargeInteger result");
+        if (!factorialApint(30).equals(new Apint(res)))
+            throw new Error("Invalid Apint result");
+        Options opt = new OptionsBuilder().include("FactorialBenchmark.*").build();
         new Runner(opt).run();
     }
 
