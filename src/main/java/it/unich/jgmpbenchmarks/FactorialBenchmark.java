@@ -19,6 +19,7 @@ package it.unich.jgmpbenchmarks;
 import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
+import org.jscience.mathematics.number.LargeInteger;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
@@ -35,50 +36,69 @@ import it.unich.jgmp.MPZ;
 @Measurement(iterations = 1)
 
 /**
- * Benchmarks for JGMP using prime numbers
+ * Benchmarks for JGMP using factorial
  */
-public class JGMPPrimeBenchmark {
+public class FactorialBenchmark {
 
-    @Param({ "10", "100", "1000" })
-    public int prime;
+    @Param({ "1000", "10000", "100000" })
+    public int fact;
 
     @Benchmark
-    public MPZ nextProbablePrimeMPZ() {
-        return nextProbablePrimeMPZ(prime);
+    public MPZ factorialMPZfast() {
+        return MPZ.facUi(fact);
     }
 
     @Benchmark
-    public BigInteger nextProbablePrimeBigInteger() {
-        return nextProbablePrimeBigInteger(prime);
+    public MPZ factorialMPZ() {
+        return factorialMPZ(fact);
+    }
+
+    @Benchmark
+    public BigInteger factorialBigInteger() {
+        return factorialBigInteger(fact);
+    }
+
+    @Benchmark
+    public LargeInteger factorialLargeInteger() {
+        return factorialLargeInteger(fact);
     }
 
     /**
-     * Benchmarks for JGMP using prime numbers
+     * Benchmarks for JGMP using factorial
      *
      * @param args not used.
      */
     public static void main(String[] args) throws RunnerException {
-        Options opt = new OptionsBuilder().include(JGMPPrimeBenchmark.class.getSimpleName()).build();
+        Options opt = new OptionsBuilder().include(FactorialBenchmark.class.getSimpleName()).build();
 
         new Runner(opt).run();
     }
 
-    public static BigInteger nextProbablePrimeBigInteger(int x) {
-        BigInteger b = BigInteger.valueOf(2);
-        b = b.pow(x);
-        for (int i = 1; i <= 100; i++) {
-            b = b.nextProbablePrime();
+    public static MPZ factorialMPZ(int x) {
+        MPZ f = new MPZ(1);
+        while (x >= 1) {
+            f.mulAssign(f, x);
+            x -= 1;
         }
-        return b;
+        return f;
     }
 
-    public static MPZ nextProbablePrimeMPZ(int x) {
-        MPZ m = new MPZ(1);
-        m.mul2ExpAssign(m, x);
-        for (int i = 1; i <= 100; i++) {
-            m.nextprimeAssign(m);
+    public static BigInteger factorialBigInteger(int x) {
+        BigInteger f = BigInteger.ONE;
+        while (x >= 1) {
+            f = f.multiply(BigInteger.valueOf(x));
+            x -= 1;
         }
-        return m;
+        return f;
+    }
+
+    public static LargeInteger factorialLargeInteger(int x) {
+        LargeInteger f = LargeInteger.ONE;
+        while (x >= 1) {
+            f = f.times(x);
+            x -= 1;
+        }
+        return f;
     }
 
 }
