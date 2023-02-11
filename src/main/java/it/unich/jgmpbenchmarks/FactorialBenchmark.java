@@ -37,7 +37,7 @@ import it.unich.jgmp.MPZ;
 @Measurement(iterations = 1)
 
 /**
- * Benchmarks for JGMP using factorial
+ * Benchmarks for JGMP: computing the factorial of a number.
  */
 public class FactorialBenchmark {
 
@@ -55,6 +55,11 @@ public class FactorialBenchmark {
     }
 
     @Benchmark
+    public MPZ factorialMPZImmutable() {
+        return factorialMPZImmutable(fact);
+    }
+
+    @Benchmark
     public BigInteger factorialBigInteger() {
         return factorialBigInteger(fact);
     }
@@ -68,10 +73,9 @@ public class FactorialBenchmark {
     public Apint factorialApint() {
         return factorialApint(fact);
     }
+
     /**
-     * Benchmarks for JGMP using factorial
-     *
-     * @param args not used.
+     * Benchmarks for JGMP: factorial.
      */
     public static void main(String[] args) throws RunnerException {
         String res = "265252859812191058636308480000000";
@@ -79,14 +83,17 @@ public class FactorialBenchmark {
             throw new Error("Invalid BigInteger result");
         if (!factorialMPZ(30).equals(new MPZ(res)))
             throw new Error("Invalid MPZ result");
+        if (!factorialMPZImmutable(30).equals(new MPZ(res)))
+            throw new Error("Invalid MPZ Immutable result");
         if (!factorialLargeInteger(30).equals(LargeInteger.valueOf(res)))
             throw new Error("Invalid LargeInteger result");
         if (!factorialApint(30).equals(new Apint(res)))
             throw new Error("Invalid Apint result");
-        Options opt = new OptionsBuilder().include("FactorialBenchmark.*").build();
+        Options opt = new OptionsBuilder().include("FactorialBenchmark").build();
         new Runner(opt).run();
     }
 
+    /* JGMP */
     public static MPZ factorialMPZ(int x) {
         MPZ f = new MPZ(1);
         while (x >= 1) {
@@ -96,6 +103,17 @@ public class FactorialBenchmark {
         return f;
     }
 
+     /* JGMP */
+     public static MPZ factorialMPZImmutable(int x) {
+        MPZ f = new MPZ(1);
+        while (x >= 1) {
+            f = f.mul(x);
+            x -= 1;
+        }
+        return f;
+    }
+
+    /* BigInteger */
     public static BigInteger factorialBigInteger(int x) {
         BigInteger f = BigInteger.ONE;
         while (x >= 1) {
@@ -105,6 +123,7 @@ public class FactorialBenchmark {
         return f;
     }
 
+    /* JScience */
     public static LargeInteger factorialLargeInteger(int x) {
         LargeInteger f = LargeInteger.ONE;
         while (x >= 1) {
@@ -114,6 +133,7 @@ public class FactorialBenchmark {
         return f;
     }
 
+    /* Apfloat */
     public static Apint factorialApint(int x) {
         Apint f = Apint.ONE;
         while (x >= 1) {

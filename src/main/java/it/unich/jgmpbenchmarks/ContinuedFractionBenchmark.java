@@ -48,6 +48,11 @@ public class ContinuedFractionBenchmark {
     }
 
     @Benchmark
+    public MPQ continuedFractionMPQImmutable() {
+        return continuedFractionMPQImmutable(steps);
+    }
+
+    @Benchmark
     public Rational continuedFractionRational() {
         return continuedFractionRational(steps);
     }
@@ -61,29 +66,27 @@ public class ContinuedFractionBenchmark {
     public Aprational continuedFractionAprational() {
         return continuedFractionAprational(steps);
     }
+
     /**
-     * Benchmarks for JGMP using factorial
-     *
-     * @param args not used.
+     * Benchmarks for JGMP: using continued fractions for approximating pi with rationals.
      */
     public static void main(String[] args) throws RunnerException {
-        MPQ valMPQ = continuedFractionMPQ(3);
-        if (!valMPQ.equals(new MPQ(1321, 420)))
+        if (!continuedFractionMPQ(3).equals(new MPQ(1321, 420)))
             throw new Error("Invalid MPQ result");
-        Rational valRational = continuedFractionRational(3);
-        if (!valRational.equals(Rational.valueOf(1321, 420)))
+        if (!continuedFractionMPQImmutable(3).equals(new MPQ(1321, 420)))
+            throw new Error("Invalid MPQ Immutable result");
+        if (!continuedFractionRational(3).equals(Rational.valueOf(1321, 420)))
             throw new Error("Invalid Rational result");
-        BigFraction valBigFraction = continuedFractionBigFraction(3);
-        if (!valBigFraction.equals(BigFraction.of(1321, 420)))
+        if (!continuedFractionBigFraction(3).equals(BigFraction.of(1321, 420)))
             throw new Error("Invalid BigFraction result");
-        Aprational valAprational = continuedFractionAprational(3);
-            if (!valAprational.equals(new Aprational(new Apint(1321), new Apint(420))))
-                throw new Error("Invalid Aprational result");
+        if (!continuedFractionAprational(3).equals(new Aprational(new Apint(1321), new Apint(420))))
+            throw new Error("Invalid Aprational result");
 
-        Options opt = new OptionsBuilder().include(ContinuedFractionBenchmark.class.getSimpleName()).build();
+        Options opt = new OptionsBuilder().include("ContinuedFractionBenchmark").build();
         new Runner(opt).run();
     }
 
+    /* JGMP */
     public static MPQ continuedFractionMPQ(int steps) {
         MPQ value = new MPQ();
         MPQ numerator = new MPQ();
@@ -99,6 +102,21 @@ public class ContinuedFractionBenchmark {
         return value;
     }
 
+    /* JGMP */
+    public static MPQ continuedFractionMPQImmutable(int steps) {
+        MPQ value = new MPQ();
+        MPQ six = new MPQ(6);
+        while (steps >= 1) {
+            value = value.add(six);
+            MPQ numerator = new MPQ(2 * steps - 1);
+            numerator = numerator.mul(numerator);
+            value = numerator.div(value);
+            steps -= 1;
+        }
+        return value.add(new MPQ(3));
+    }
+
+    /* JScience */
     public static Rational continuedFractionRational(int steps) {
         Rational value = Rational.ZERO;
         Rational six = Rational.valueOf(6, 1);
@@ -113,6 +131,7 @@ public class ContinuedFractionBenchmark {
         return value;
     }
 
+    /* Apache Commons Numbers */
     public static BigFraction continuedFractionBigFraction(int steps) {
         BigFraction value = BigFraction.ZERO;
         while (steps >= 1) {
@@ -126,6 +145,7 @@ public class ContinuedFractionBenchmark {
         return value;
     }
 
+    /* Apfloat */
     public static Aprational continuedFractionAprational(int steps) {
         Aprational value = Aprational.ZERO;
         Aprational six = new Apint(6);

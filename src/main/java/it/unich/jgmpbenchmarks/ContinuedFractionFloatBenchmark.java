@@ -17,14 +17,10 @@
 package it.unich.jgmpbenchmarks;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.numbers.fraction.BigFraction;
 import org.apfloat.Apfloat;
-import org.apfloat.Apint;
-import org.apfloat.Aprational;
 import org.jscience.mathematics.number.FloatingPoint;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
@@ -60,6 +56,11 @@ public class ContinuedFractionFloatBenchmark {
     }
 
     @Benchmark
+    public MPF continuedFractionMPFImmutable() {
+        return continuedFractionMPFImmutable(steps, prec);
+    }
+
+    @Benchmark
     public FloatingPoint continuedFractionFloatingPoint() {
         return continuedFractionFloatingPoint(steps, prec);
     }
@@ -70,25 +71,27 @@ public class ContinuedFractionFloatBenchmark {
     }
 
     /**
-     * Benchmarks for JGMP using continued fractions for approximating pi.
+     * Benchmarks for JGMP: using continued fractions for approximating pi with
+     * floats.
      */
     public static void main(String[] args) throws RunnerException {
         String resBigDecimal = "3.141592410971980674262588860216726437293650906745376695673194907396554410588564312078";
-        if (! continuedFractionBigDecimal(100, 128).toString().equals(resBigDecimal))
+        if (!continuedFractionBigDecimal(100, 128).toString().equals(resBigDecimal))
             throw new Error("Invalid MPF result");
         String resMPF = "3.141592410971980674262588860216726437293";
-        if (! continuedFractionMPF(100, 128).toString().equals(resMPF))
+        if (!continuedFractionMPF(100, 128).toString().equals(resMPF))
             throw new Error("Invalid MPF result");
+        if (!continuedFractionMPFImmutable(100, 128).toString().equals(resMPF))
+            throw new Error("Invalid MPF Immutable result");
         String resFloatingPoint = "0.314159241097198067426258886021672643729365E1";
-        if (! continuedFractionFloatingPoint(100, 128).toString().equals(resFloatingPoint))
+        if (!continuedFractionFloatingPoint(100, 128).toString().equals(resFloatingPoint))
             throw new Error("Invalid FloatingPoint result");
         String resApfloat = "3.14159241097198067426258886021672643729365";
-        if (! continuedFractionApfloat(100, 128).toString().equals(resApfloat))
+        if (!continuedFractionApfloat(100, 128).toString().equals(resApfloat))
             throw new Error("Invalid Apfloat result");
-        Options opt = new OptionsBuilder().include(ContinuedFractionFloatBenchmark.class.getSimpleName()).build();
+        Options opt = new OptionsBuilder().include("ContinuedFractionFloatBenchmark").build();
         new Runner(opt).run();
     }
-
 
     /* Bigdecimal */
     public static BigDecimal continuedFractionBigDecimal(int steps, int prec) {
@@ -97,7 +100,7 @@ public class ContinuedFractionFloatBenchmark {
         RoundingMode round = RoundingMode.HALF_DOWN;
         while (steps >= 1) {
             value = value.add(six);
-            BigDecimal numerator = BigDecimal.valueOf(2 * steps - 1).setScale(prec/3);
+            BigDecimal numerator = BigDecimal.valueOf(2 * steps - 1).setScale(prec / 3);
             numerator = numerator.multiply(numerator);
             value = numerator.divide(value, round);
             steps -= 1;
@@ -122,6 +125,21 @@ public class ContinuedFractionFloatBenchmark {
         return value;
     }
 
+    /* JGMP */
+    public static MPF continuedFractionMPFImmutable(int steps, int prec) {
+        MPF.setDefaultPrec(prec);
+        MPF value = new MPF();
+        MPF six = new MPF(6);
+        while (steps >= 1) {
+            value.addAssign(six);
+            MPF numerator = new MPF(2 * steps - 1);
+            numerator = numerator.mul(numerator);
+            value = numerator.div(value);
+            steps -= 1;
+        }
+        return value.add(new MPF(3));
+    }
+
     /* JScience */
     public static FloatingPoint continuedFractionFloatingPoint(int steps, int prec) {
         FloatingPoint.setDigits(prec / 3);
@@ -140,11 +158,11 @@ public class ContinuedFractionFloatBenchmark {
 
     /* Apfloat */
     public static Apfloat continuedFractionApfloat(int steps, int prec) {
-        Apfloat value = new Apfloat(0, prec/3);
+        Apfloat value = new Apfloat(0, prec / 3);
         Apfloat six = new Apfloat(6);
         while (steps >= 1) {
             value = value.add(six);
-            Apfloat numerator = new Apfloat(2 * steps - 1, prec/3);
+            Apfloat numerator = new Apfloat(2 * steps - 1, prec / 3);
             numerator = numerator.multiply(numerator);
             value = numerator.divide(value);
             steps -= 1;

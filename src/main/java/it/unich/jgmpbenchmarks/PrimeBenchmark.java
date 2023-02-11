@@ -35,7 +35,7 @@ import it.unich.jgmp.MPZ;
 @Measurement(iterations = 1)
 
 /**
- * Benchmarks for JGMP using prime numbers
+ * Benchmarks for JGMP: pseudo-prime number generation.
  */
 public class PrimeBenchmark {
 
@@ -45,6 +45,11 @@ public class PrimeBenchmark {
     @Benchmark
     public MPZ nextProbablePrimeMPZ() {
         return nextProbablePrimeMPZ(prime);
+    }
+
+    @Benchmark
+    public MPZ nextProbablePrimeMPZImmutable() {
+        return nextProbablePrimeMPZImmutable(prime);
     }
 
     @Benchmark
@@ -63,11 +68,14 @@ public class PrimeBenchmark {
             throw new Error("Invalid BigInteger result");
         if (!nextProbablePrimeMPZ(100).equals(new MPZ(res)))
             throw new Error("Invalid MPZ result");
+        if (!nextProbablePrimeMPZImmutable(100).equals(new MPZ(res)))
+            throw new Error("Invalid MPZ Immutable result");
 
-        Options opt = new OptionsBuilder().include(PrimeBenchmark.class.getSimpleName()).build();
+        Options opt = new OptionsBuilder().include("PrimeBenchmark").build();
         new Runner(opt).run();
     }
 
+    /* BigInteger */
     public static BigInteger nextProbablePrimeBigInteger(int x) {
         BigInteger b = BigInteger.valueOf(2);
         b = b.pow(x);
@@ -77,11 +85,22 @@ public class PrimeBenchmark {
         return b;
     }
 
+    /* JGMP */
     public static MPZ nextProbablePrimeMPZ(int x) {
         MPZ m = new MPZ(1);
         m.mul2ExpAssign(m, x);
         for (int i = 1; i <= 100; i++) {
             m.nextprimeAssign(m);
+        }
+        return m;
+    }
+
+    /* JGMP */
+    public static MPZ nextProbablePrimeMPZImmutable(int x) {
+        MPZ m = new MPZ(1);
+        m = m.mul2Exp(x);
+        for (int i = 1; i <= 100; i++) {
+            m = m.nextprime();
         }
         return m;
     }
