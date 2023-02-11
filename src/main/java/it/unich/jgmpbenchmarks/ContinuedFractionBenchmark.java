@@ -18,6 +18,9 @@ package it.unich.jgmpbenchmarks;
 
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.numbers.fraction.BigFraction;
+import org.apfloat.Apint;
+import org.apfloat.Aprational;
 import org.jscience.mathematics.number.Rational;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
@@ -48,6 +51,16 @@ public class ContinuedFractionBenchmark {
     public Rational continuedFractionRational() {
         return continuedFractionRational(steps);
     }
+
+    @Benchmark
+    public BigFraction continuedFractionBigFraction() {
+        return continuedFractionBigFraction(steps);
+    }
+
+    @Benchmark
+    public Aprational continuedFractionAprational() {
+        return continuedFractionAprational(steps);
+    }
     /**
      * Benchmarks for JGMP using factorial
      *
@@ -58,9 +71,15 @@ public class ContinuedFractionBenchmark {
         if (!valMPQ.equals(new MPQ(1321, 420)))
             throw new Error("Invalid MPQ result");
         Rational valRational = continuedFractionRational(3);
-        if (!valMPQ.equals(new MPQ(1321, 420)))
+        if (!valRational.equals(Rational.valueOf(1321, 420)))
             throw new Error("Invalid Rational result");
-        assert (valRational.equals(Rational.valueOf(1321, 420)));
+        BigFraction valBigFraction = continuedFractionBigFraction(3);
+        if (!valBigFraction.equals(BigFraction.of(1321, 420)))
+            throw new Error("Invalid BigFraction result");
+        Aprational valAprational = continuedFractionAprational(3);
+            if (!valAprational.equals(new Aprational(new Apint(1321), new Apint(420))))
+                throw new Error("Invalid Aprational result");
+
         Options opt = new OptionsBuilder().include(ContinuedFractionBenchmark.class.getSimpleName()).build();
         new Runner(opt).run();
     }
@@ -91,6 +110,33 @@ public class ContinuedFractionBenchmark {
             steps -= 1;
         }
         value = value.plus(Rational.valueOf(3, 1));
+        return value;
+    }
+
+    public static BigFraction continuedFractionBigFraction(int steps) {
+        BigFraction value = BigFraction.ZERO;
+        while (steps >= 1) {
+            value = value.add(6);
+            BigFraction numerator = BigFraction.of(2 * steps - 1);
+            numerator = numerator.multiply(2 * steps - 1);
+            value = numerator.divide(value);
+            steps -= 1;
+        }
+        value = value.add(3);
+        return value;
+    }
+
+    public static Aprational continuedFractionAprational(int steps) {
+        Aprational value = Aprational.ZERO;
+        Aprational six = new Apint(6);
+        while (steps >= 1) {
+            value = value.add(six);
+            Aprational numerator = new Aprational(2 * steps - 1);
+            numerator = numerator.multiply(numerator);
+            value = numerator.divide(value);
+            steps -= 1;
+        }
+        value = value.add(new Apint(3));
         return value;
     }
 

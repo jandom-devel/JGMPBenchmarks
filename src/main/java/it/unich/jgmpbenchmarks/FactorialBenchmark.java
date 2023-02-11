@@ -19,6 +19,7 @@ package it.unich.jgmpbenchmarks;
 import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
+import org.apfloat.Apint;
 import org.jscience.mathematics.number.LargeInteger;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
@@ -63,6 +64,10 @@ public class FactorialBenchmark {
         return factorialLargeInteger(fact);
     }
 
+    @Benchmark
+    public Apint factorialApint() {
+        return factorialApint(fact);
+    }
     /**
      * Benchmarks for JGMP using factorial
      *
@@ -96,6 +101,15 @@ public class FactorialBenchmark {
         LargeInteger f = LargeInteger.ONE;
         while (x >= 1) {
             f = f.times(x);
+            x -= 1;
+        }
+        return f;
+    }
+
+    public static Apint factorialApint(int x) {
+        Apint f = Apint.ONE;
+        while (x >= 1) {
+            f = f.multiply(new Apint(x));
             x -= 1;
         }
         return f;
