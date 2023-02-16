@@ -23,7 +23,7 @@ import it.unich.jgmp.*;
  * Example for JGMP using factorial
  */
 public class JGMPFactorialExample {
-    
+
     /**
      * Example for JGMP using factorial
      * @param args not used.
@@ -31,13 +31,31 @@ public class JGMPFactorialExample {
     public static void main(String[] args) {
         int x = 100000;
         MPZ factorial = factorialMPZ(x);
-        System.out.print(factorial);
+        MPZ immutableFactorial = immutableFactorialMPZ(x);
+        System.out.print(factorial.equals(immutableFactorial));
     }
-    
+    /**
+     * Compute the factorial of x.
+     * @param x
+     * @return
+     */
     public static MPZ factorialMPZ(int x) {
         MPZ f = new MPZ(1);
         while (x >= 1)  {
             f.mulAssign(f, x);
+            x -= 1;
+        }
+        return f;
+    }
+    /**
+     * Compute the factorial of x using an immutable method.
+     * @param x
+     * @return
+     */
+    public static MPZ immutableFactorialMPZ(int x) {
+        MPZ f = new MPZ(1);
+        while (x >= 1)  {
+            f = f.mul(x);
             x -= 1;
         }
         return f;
