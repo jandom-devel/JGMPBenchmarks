@@ -6,5 +6,8 @@
     "java.configuration.updateBuildConfiguration": "interactive",
     "files.watcherExclude": {
         "**/target": true
-    }
+    },
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java"
+    },
 }
