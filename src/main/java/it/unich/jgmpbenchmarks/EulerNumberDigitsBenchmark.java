@@ -39,14 +39,14 @@ import it.unich.jgmp.*;
 /**
  * Benchmarks for JGMP computing Euler's number digits.
  */
-public class JGMPEulerNumberDigitsBenchmark {
+public class EulerNumberDigitsBenchmark {
 
     @Param({ "10" })
     public int n ;
 
     @Param({ "30" })
     public int scale ;
-    
+
     @Benchmark
     public MPF eulerMPZ() {
         return eulerMPZ(n, scale);
@@ -69,7 +69,7 @@ public class JGMPEulerNumberDigitsBenchmark {
 
         new Runner(opt).run();
     }
-    
+
     public static MPF eulerMPZ(int x, int scale) {
         MPF.setDefaultPrec(128);
         MPF one = new MPF(1);

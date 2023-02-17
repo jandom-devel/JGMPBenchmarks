@@ -22,7 +22,7 @@ import it.unich.jgmp.*;
 /**
  * Example for JGMP using factorial
  */
-public class JGMPFactorialExample {
+public class FactorialExample {
 
     /**
      * Example for JGMP using factorial
