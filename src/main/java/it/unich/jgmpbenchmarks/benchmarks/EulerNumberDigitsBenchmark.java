@@ -2,24 +2,23 @@
  * Copyright 2022, 2023 Francesca Scozzari <francesca.scozzari@unich.it> and
  *                      Gianluca Amato <gianluca.amato@unich.it>
  *
- * JGMPBenchmarks is a set of benchmarks for JGMP. JGMPBenchmarks is free software: you can
- * redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * JGMPBenchmarks is a set of benchmarks for JGMP. JGMPBenchmarks is free
+ * software: you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version.
  *
- * JGMPBenchmarks is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of a MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * JGMPBenchmarks is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of a MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
  * JGMPBenchmarks. If not, see <http://www.gnu.org/licenses/>.
  */
-package it.unich.jgmpbenchmarks;
+package it.unich.jgmpbenchmarks.benchmarks;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.concurrent.TimeUnit;
 
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
@@ -27,7 +26,9 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
-import it.unich.jgmp.MPF;
+import java.util.concurrent.TimeUnit;
+
+import it.unich.jgmp.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -37,7 +38,8 @@ import it.unich.jgmp.MPF;
 @Measurement(iterations = 1)
 
 /**
- * Benchmarks for JGMP computing Euler's number digits.
+ * Benchmarks for JGMP: computing an approximation of the Euler's number with
+ * floats.
  */
 public class EulerNumberDigitsBenchmark {
 
@@ -57,11 +59,6 @@ public class EulerNumberDigitsBenchmark {
         return eulerBigDecimal(n, scale);
     }
 
-    /**
-     * Benchmarks for JGMP computing Euler's number digits.
-     *
-     * @param args not used.
-     */
     public static void main(String[] args) throws RunnerException {
         System.out.println(eulerBigDecimal(30, 39));
         System.out.println(eulerMPZ(30, 30));
@@ -70,6 +67,7 @@ public class EulerNumberDigitsBenchmark {
         new Runner(opt).run();
     }
 
+    /* JGMP */
     public static MPF eulerMPZ(int x, int scale) {
         MPF.setDefaultPrec(128);
         MPF one = new MPF(1);
@@ -83,6 +81,7 @@ public class EulerNumberDigitsBenchmark {
         return e;
     }
 
+    /* BigDecimal */
     public static BigDecimal eulerBigDecimal(int x, int scale) {
         BigDecimal one = BigDecimal.ONE;
         BigDecimal n = BigDecimal.ONE;
