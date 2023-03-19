@@ -44,7 +44,7 @@ import it.unich.jgmp.MPZ;
  */
 public class FactorialBenchmark {
 
-    @Param({ "1000", "10000", "100000" })
+    @Param({ "1", "10", "100", "1000", "10000", "100000" })
     public int fact;
 
     @Setup
