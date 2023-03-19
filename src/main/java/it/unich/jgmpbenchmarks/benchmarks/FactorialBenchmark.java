@@ -29,6 +29,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import it.unich.jgmp.AllocationMonitor;
 import it.unich.jgmp.MPZ;
 
 @BenchmarkMode(Mode.AverageTime)
@@ -45,6 +46,11 @@ public class FactorialBenchmark {
 
     @Param({ "1000", "10000", "100000" })
     public int fact;
+
+    @Setup
+    public void setup() {
+        AllocationMonitor.enable();
+    }
 
     @Benchmark
     public MPZ factorialMPZfast() {
