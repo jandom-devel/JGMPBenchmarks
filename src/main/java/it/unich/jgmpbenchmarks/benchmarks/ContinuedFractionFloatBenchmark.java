@@ -34,9 +34,9 @@ import it.unich.jgmp.MPF;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = { "-Xms2G", "-Xmx2G" })
-@Warmup(iterations = 1)
-@Measurement(iterations = 1)
+@Fork(value = 5, jvmArgs = { "-Xms2G", "-Xmx2G" })
+@Warmup(iterations = 5)
+@Measurement(iterations = 5)
 
 /**
  * Benchmarks for JGMP: using continued fractions for approximating pi with
