@@ -76,7 +76,6 @@ public class EulerNumberDigitsBenchmark {
         for (int i = 1; i <= x; i++) {
             e.addAssign(e, one.div(fact));
             fact.mulUiAssign(fact, i + 1);
-            //System.out.println(e+" "+n+" "+fact+" "+one.divide(fact,scale,RoundingMode.CEILING));
         }
         return e;
     }
@@ -91,7 +90,6 @@ public class EulerNumberDigitsBenchmark {
             e = e.add(one.divide(fact, scale, RoundingMode.FLOOR));
             n = n.add(one);
             fact = fact.multiply(n);
-            //System.out.println(e+" "+n+" "+fact+" "+one.divide(fact,scale,RoundingMode.CEILING));
         }
         return e;
     }
