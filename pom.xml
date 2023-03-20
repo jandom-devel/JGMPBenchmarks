@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Basics -->
@@ -19,8 +21,8 @@
             <version>1.2</version>
         </dependency>
         <dependency>
-    	    <groupId>org.openjdk.jmh</groupId>
-    	    <artifactId>jmh-core</artifactId>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
             <version>1.35</version>
         </dependency>
         <dependency>
@@ -42,6 +44,25 @@
             <groupId>org.apfloat</groupId>
             <artifactId>apfloat</artifactId>
             <version>1.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fusesource.hawtjni</groupId>
+            <artifactId>hawtjni-runtime</artifactId>
+            <version>1.18</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kframework.mpfr_java</groupId>
+            <artifactId>mpfr-java</artifactId>
+            <version>1.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/mpfr_java-1.4.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.kframework.mpfr_java-native</groupId>
+            <artifactId>mpfr-java</artifactId>
+            <version>1.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/mpfr_java-1.4-linux64.jar</systemPath>
         </dependency>
     </dependencies>
     <properties>
@@ -134,27 +155,27 @@
                 <version>3.0.0-M6</version>
             </plugin>
             <plugin>
-    		<artifactId>maven-assembly-plugin</artifactId>
-    		<executions>
-    		  <execution>
-        	    <phase>package</phase>
-        	    <goals>
-          	        <goal>single</goal>
-        	    </goals>
-      		  </execution>
-    		</executions>
-    		<configuration>
-      		    <archive>
-        		<manifest>
-          		    <addClasspath>true</addClasspath>
-          		    <mainClass>it.unich.jgmpbenchmarks.JGMPFactorialBenchmark</mainClass>
-        		</manifest>
-      		    </archive>
-      		    <descriptorRefs>
-        		<descriptorRef>jar-with-dependencies</descriptorRef>
-      		    </descriptorRefs>
-    		</configuration>
- 	    </plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>it.unich.jgmpbenchmarks.JGMPFactorialBenchmark</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

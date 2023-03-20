@@ -19,6 +19,7 @@ package it.unich.jgmpbenchmarks.benchmarks;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.concurrent.TimeUnit;
 
 import org.apfloat.Apfloat;
@@ -29,6 +30,8 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.kframework.mpfr.BigFloat;
+import org.kframework.mpfr.BinaryMathContext;
 
 import it.unich.jgmp.MPF;
 
@@ -83,7 +86,15 @@ public class ContinuedFractionFloatBenchmark {
         return continuedFractionApfloat(steps, prec, 2);
     }
 
+    @Benchmark
+    public BigFloat continuedFractionBigFloat() {
+        return continuedFractionBigFloat(steps, prec);
+    }
+
     public static void main(String[] args) throws RunnerException {
+        String resBigFloat = "3.141592410971980674262588860216726437296e+00";
+        if (!continuedFractionBigFloat(100, 128).toString().equals(resBigFloat))
+            throw new Error("Invalid BigFloat result");
         String resBigDecimal = "3.14159241097198067426258886021672643729";
         if (!continuedFractionBigDecimal(100, 128).toString().equals(resBigDecimal))
             throw new Error("Invalid BigDecimal result");
@@ -184,4 +195,18 @@ public class ContinuedFractionFloatBenchmark {
         return value;
     }
 
+    public static BigFloat continuedFractionBigFloat(int steps, int prec) {
+        BigFloat value = BigFloat.zero(prec);
+        BinaryMathContext c = new BinaryMathContext(prec, RoundingMode.HALF_EVEN);
+        BigFloat six = new BigFloat(6, c);
+        while (steps >= 1) {
+            value = value.add(six, c);
+            BigFloat numerator = new BigFloat(2 * steps - 1, c);
+            numerator = numerator.multiply(numerator, c);
+            value = numerator.divide(value, c);
+            steps -= 1;
+        }
+        value = value.add(new BigFloat(3, c), c);
+        return value;
+    }
 }
