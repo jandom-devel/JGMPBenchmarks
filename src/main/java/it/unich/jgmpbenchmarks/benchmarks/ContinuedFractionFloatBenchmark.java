@@ -93,7 +93,7 @@ public class ContinuedFractionFloatBenchmark {
 
     public static void main(String[] args) throws RunnerException {
         String resBigFloat = "3.141592410971980674262588860216726437296e+00";
-        if (!continuedFractionBigFloat(100, 128).toString().equals(resBigFloat))
+        if (!continuedFractionBigFloat(100, 128).toString().replaceAll(",", ".").equals(resBigFloat))
             throw new Error("Invalid BigFloat result");
         String resBigDecimal = "3.14159241097198067426258886021672643729";
         if (!continuedFractionBigDecimal(100, 128).toString().equals(resBigDecimal))
@@ -195,6 +195,7 @@ public class ContinuedFractionFloatBenchmark {
         return value;
     }
 
+    /* MPFR */
     public static BigFloat continuedFractionBigFloat(int steps, int prec) {
         BigFloat value = BigFloat.zero(prec);
         BinaryMathContext c = new BinaryMathContext(prec, RoundingMode.HALF_EVEN);
