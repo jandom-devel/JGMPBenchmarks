@@ -25,13 +25,12 @@ import java.util.concurrent.TimeUnit;
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatContext;
 import org.jscience.mathematics.number.FloatingPoint;
+import org.kframework.mpfr.BigFloat;
+import org.kframework.mpfr.BinaryMathContext;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import org.kframework.mpfr.BigFloat;
-import org.kframework.mpfr.BinaryMathContext;
 
 import it.unich.jgmp.MPF;
 
@@ -92,9 +91,6 @@ public class ContinuedFractionFloatBenchmark {
     }
 
     public static void main(String[] args) throws RunnerException {
-        String resBigFloat = "3.141592410971980674262588860216726437296e+00";
-        if (!continuedFractionBigFloat(100, 128).toString().replaceAll(",", ".").equals(resBigFloat))
-            throw new Error("Invalid BigFloat result");
         String resBigDecimal = "3.14159241097198067426258886021672643729";
         if (!continuedFractionBigDecimal(100, 128).toString().equals(resBigDecimal))
             throw new Error("Invalid BigDecimal result");
@@ -111,8 +107,17 @@ public class ContinuedFractionFloatBenchmark {
             throw new Error("Invalid Apfloat result");
         if (!continuedFractionApfloat(100, 128, 2).toRadix(10).toString().equals(resApfloat))
             throw new Error("Invalid Apfloat binary result");
-        Options opt = new OptionsBuilder().include("ContinuedFractionFloatBenchmark").build();
-        new Runner(opt).run();
+        OptionsBuilder ob = new OptionsBuilder();
+        ob.include("ContinuedFractionFloatBenchmark");
+        try {
+            String resBigFloat = "3.141592410971980674262588860216726437296e+00";
+            if (!continuedFractionBigFloat(100, 128).toString().replaceAll(",", ".").equals(resBigFloat))
+                throw new Error("Invalid BigFloat result");
+        } catch (LinkageError e) {
+            System.err.println("Cannot launch MPFR benchmarks: " + e);
+            ob.exclude("ContinuedFractionFloatBenchmark\\.continuedFractionBigFloat");
+        }
+        new Runner(ob.build()).run();
     }
 
     /* BigDecimal */
