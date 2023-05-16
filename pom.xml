@@ -55,14 +55,14 @@
             <artifactId>mpfr-java</artifactId>
             <version>1.4</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/mpfr_java-1.4.jar</systemPath>
+            <systemPath>${pom.basedir}/lib/mpfr_java-1.4.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.kframework.mpfr_java-native</groupId>
             <artifactId>mpfr-java</artifactId>
             <version>1.4</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/mpfr_java-1.4-linux64.jar</systemPath>
+            <systemPath>${pom.basedir}/lib/mpfr_java-1.4-linux64.jar</systemPath>
         </dependency>
     </dependencies>
     <properties>
