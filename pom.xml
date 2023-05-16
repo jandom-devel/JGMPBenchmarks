@@ -64,6 +64,13 @@
             <scope>system</scope>
             <systemPath>${pom.basedir}/lib/mpfr_java-1.4-linux64.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>us.altio.gmp4j</groupId>
+            <artifactId>gmp4j</artifactId>
+            <version>1</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/lib/gmp4j.jar</systemPath>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

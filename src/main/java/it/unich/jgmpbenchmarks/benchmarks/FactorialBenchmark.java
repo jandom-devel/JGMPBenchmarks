@@ -82,10 +82,17 @@ public class FactorialBenchmark {
         return factorialApint(fact);
     }
 
+    @Benchmark
+    public us.altio.gmp4j.BigInteger factorialGMP4J() {
+        return factorialGMP4J(fact);
+    }
+
     public static void main(String[] args) throws RunnerException {
         String res = "265252859812191058636308480000000";
         if (!factorialBigInteger(30).equals(new BigInteger(res)))
             throw new Error("Invalid BigInteger result");
+        if (!factorialGMP4J(30).equals(new us.altio.gmp4j.BigInteger(res)))
+            throw new Error("Invalid GMP4J result");
         if (!factorialMPZ(30).equals(new MPZ(res)))
             throw new Error("Invalid MPZ result");
         if (!factorialMPZImmutable(30).equals(new MPZ(res)))
@@ -143,6 +150,16 @@ public class FactorialBenchmark {
         Apint f = Apint.ONE;
         while (x >= 1) {
             f = f.multiply(new Apint(x));
+            x -= 1;
+        }
+        return f;
+    }
+
+    /* GMP4J */
+    public static us.altio.gmp4j.BigInteger factorialGMP4J(int x) {
+        us.altio.gmp4j.BigInteger f = us.altio.gmp4j.BigInteger.ONE;
+        while (x >= 1) {
+            f = f.multiply(us.altio.gmp4j.BigInteger.valueOf(x));
             x -= 1;
         }
         return f;
