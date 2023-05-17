@@ -1,0 +1,67 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "ContinuedFractionBenchmark",
+            "request": "launch",
+            "mainClass": "it.unich.jgmpbenchmarks.benchmarks.ContinuedFractionBenchmark",
+            "projectName": "benchmarks"
+        },
+        {
+            "type": "java",
+            "name": "ContinuedFractionFloatBenchmark",
+            "request": "launch",
+            "mainClass": "it.unich.jgmpbenchmarks.benchmarks.ContinuedFractionFloatBenchmark",
+            "projectName": "benchmarks"
+        },
+        {
+            "type": "java",
+            "name": "EulerNumberDigitsBenchmark",
+            "request": "launch",
+            "mainClass": "it.unich.jgmpbenchmarks.benchmarks.EulerNumberDigitsBenchmark",
+            "projectName": "benchmarks"
+        },
+        {
+            "type": "java",
+            "name": "FactorialBenchmark",
+            "request": "launch",
+            "mainClass": "it.unich.jgmpbenchmarks.benchmarks.FactorialBenchmark",
+            "projectName": "benchmarks",
+            "env": {
+                "LD_LIBRARY_PATH": "lib"
+            }
+
+        },
+        {
+            "type": "java",
+            "name": "PrimeBenchmark",
+            "request": "launch",
+            "mainClass": "it.unich.jgmpbenchmarks.benchmarks.PrimeBenchmark",
+            "projectName": "benchmarks"
+        },
+        {
+            "type": "java",
+            "name": "FactorialExample",
+            "request": "launch",
+            "mainClass": "it.unich.jgmpbenchmarks.examples.FactorialExample",
+            "projectName": "benchmarks"
+        },
+        {
+            "type": "java",
+            "name": "MatrixMultiplicationExample",
+            "request": "launch",
+            "mainClass": "it.unich.jgmpbenchmarks.examples.MatrixMultiplicationExample",
+            "projectName": "benchmarks"
+        }
+    ]
+}
