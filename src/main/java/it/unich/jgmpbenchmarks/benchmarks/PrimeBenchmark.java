@@ -58,6 +58,11 @@ public class PrimeBenchmark {
         return nextProbablePrimeBigInteger(prime);
     }
 
+    @Benchmark
+    public us.altio.gmp4j.BigInteger nextProbablePrimeGMP4J() {
+        return nextProbablePrimeGMP4J(prime);
+    }
+
     public static void main(String[] args) throws RunnerException {
         String res = "1267650600228229401496703213077";
         if (!nextProbablePrimeBigInteger(100).equals(new BigInteger(res)))
@@ -67,13 +72,31 @@ public class PrimeBenchmark {
         if (!nextProbablePrimeMPZImmutable(100).equals(new MPZ(res)))
             throw new Error("Invalid MPZ Immutable result");
 
-        Options opt = new OptionsBuilder().include("PrimeBenchmark").build();
-        new Runner(opt).run();
+        OptionsBuilder ob = new OptionsBuilder();
+        ob.include("PrimeBenchmark");
+        try {
+            if (!nextProbablePrimeGMP4J(100).equals(new us.altio.gmp4j.BigInteger(res)))
+                throw new Error("Invalid GMP4J result");
+        } catch (LinkageError e) {
+            System.err.println("Cannot launch GMP4J benchmarks: " + e);
+            ob.exclude("FactorialBenchmark\\.nextProbablePrimeGMP4J");
+        }
+        new Runner(ob.build()).run();
     }
 
     /* BigInteger */
     public static BigInteger nextProbablePrimeBigInteger(int x) {
         BigInteger b = BigInteger.valueOf(2);
+        b = b.pow(x);
+        for (int i = 1; i <= 100; i++) {
+            b = b.nextProbablePrime();
+        }
+        return b;
+    }
+
+    /* GMP4J */
+    public static us.altio.gmp4j.BigInteger nextProbablePrimeGMP4J(int x) {
+        us.altio.gmp4j.BigInteger b = us.altio.gmp4j.BigInteger.valueOf(2);
         b = b.pow(x);
         for (int i = 1; i <= 100; i++) {
             b = b.nextProbablePrime();

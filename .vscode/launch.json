@@ -40,14 +40,16 @@
             "env": {
                 "LD_LIBRARY_PATH": "lib"
             }
-
         },
         {
             "type": "java",
             "name": "PrimeBenchmark",
             "request": "launch",
             "mainClass": "it.unich.jgmpbenchmarks.benchmarks.PrimeBenchmark",
-            "projectName": "benchmarks"
+            "projectName": "benchmarks",
+            "env": {
+                "LD_LIBRARY_PATH": "lib"
+            }
         },
         {
             "type": "java",
