@@ -101,6 +101,12 @@ public class FactorialBenchmark {
         return factorialGMP4J(fact);
     }
 
+    @Benchmark
+    public us.altio.gmp4j.BigInteger factorialGMP4Jfast() {
+        if (manualGc) System.gc();
+        return us.altio.gmp4j.BigInteger.factorial(fact);
+    }
+
     public static void main(String[] args) throws RunnerException {
         String res = "265252859812191058636308480000000";
         if (!factorialBigInteger(30).equals(new BigInteger(res)))
