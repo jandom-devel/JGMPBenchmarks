@@ -111,8 +111,6 @@ public class FactorialBenchmark {
         String res = "265252859812191058636308480000000";
         if (!factorialBigInteger(30).equals(new BigInteger(res)))
             throw new Error("Invalid BigInteger result");
-        if (!factorialGMP4J(30).equals(new us.altio.gmp4j.BigInteger(res)))
-            throw new Error("Invalid GMP4J result");
         if (!factorialMPZ(30).equals(new MPZ(res)))
             throw new Error("Invalid MPZ result");
         if (!factorialMPZImmutable(30).equals(new MPZ(res)))
@@ -121,8 +119,18 @@ public class FactorialBenchmark {
             throw new Error("Invalid LargeInteger result");
         if (!factorialApint(30).equals(new Apint(res)))
             throw new Error("Invalid Apint result");
-        Options opt = new OptionsBuilder().include("FactorialBenchmark").build();
-        new Runner(opt).run();
+
+        OptionsBuilder ob = new OptionsBuilder();
+        ob.include("FactorialBenchmark");
+        try {
+            if (!factorialGMP4J(30).equals(new us.altio.gmp4j.BigInteger(res)))
+                throw new Error("Invalid GMP4J result");
+        } catch (LinkageError e) {
+            System.err.println("Cannot launch GMP4J benchmarks: " + e);
+            ob.exclude("FactorialBenchmark\\.factorialGMP4J");
+            ob.exclude("FactorialBenchmark\\.factorialGMP4Jfast");
+        }
+        new Runner(ob.build()).run();
     }
 
     /* JGMP */
