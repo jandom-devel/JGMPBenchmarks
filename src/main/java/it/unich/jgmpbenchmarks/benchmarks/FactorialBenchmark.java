@@ -47,43 +47,57 @@ public class FactorialBenchmark {
     @Param({ "1", "10", "100", "1000", "10000", "100000" })
     public int fact;
 
+    @Param({ "no", "manual", "monitor"})
+    public String gcMmode;
+
+    public boolean manualGc;
+
     @Setup
     public void setup() {
-        AllocationMonitor.enable();
+        if (gcMmode.equals("monitor"))
+            AllocationMonitor.enable();
+        manualGc = gcMmode.equals("manual");
     }
 
     @Benchmark
     public MPZ factorialMPZfast() {
+        if (manualGc) System.gc();
         return MPZ.facUi(fact);
     }
 
     @Benchmark
     public MPZ factorialMPZ() {
+        if (manualGc) System.gc();
         return factorialMPZ(fact);
     }
 
     @Benchmark
     public MPZ factorialMPZImmutable() {
+        if (manualGc) System.gc();
         return factorialMPZImmutable(fact);
     }
 
     @Benchmark
     public BigInteger factorialBigInteger() {
+        if (manualGc) System.gc();
         return factorialBigInteger(fact);
     }
 
     @Benchmark
     public LargeInteger factorialLargeInteger() {
+        if (manualGc) System.gc();
         return factorialLargeInteger(fact);
     }
 
     @Benchmark
     public Apint factorialApint() {
+        if (manualGc) System.gc();
         return factorialApint(fact);
     }
 
     @Benchmark
     public us.altio.gmp4j.BigInteger factorialGMP4J() {
+        if (manualGc) System.gc();
         return factorialGMP4J(fact);
     }
 
