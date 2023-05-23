@@ -13,7 +13,7 @@
         <dependency>
             <groupId>it.unich.jgmp</groupId>
             <artifactId>jgmp</artifactId>
-            <version>1.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.javatuples</groupId>
