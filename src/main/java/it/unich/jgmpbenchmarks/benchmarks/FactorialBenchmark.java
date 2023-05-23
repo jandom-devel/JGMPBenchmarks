@@ -129,6 +129,7 @@ public class FactorialBenchmark {
             ob.exclude("FactorialBenchmark\\.factorialGMP4J");
             ob.exclude("FactorialBenchmark\\.factorialGMP4Jfast");
         }
+        ob.addProfiler("gc");
         new Runner(ob.build()).run();
     }
 
