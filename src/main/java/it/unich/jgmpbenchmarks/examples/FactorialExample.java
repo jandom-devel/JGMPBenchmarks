@@ -37,7 +37,7 @@ public class FactorialExample {
 	public static MPZ factorialMPZ(int x) {
 		MPZ f = new MPZ(1);
 		while (x >= 1) {
-			f.mulAssign(f, x);
+			f.mulAssign(x);
 			x -= 1;
 		}
 		return f;
